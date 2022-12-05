@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+from os.path import exists as file_exists
+
+FULL_POWER_FILE = '/sys/class/power_supply/BAT0/energy_full'
+CURRENT_POWER_FILE = '/sys/class/power_supply/BAT0/energy_now'
+
+if not file_exists(FULL_POWER_FILE) or not file_exists(CURRENT_POWER_FILE):
+    print("Could not access power supply.")
+    exit(1)
+
+FULL_POWER = 0
+CURRENT_POWER = 0
+
+with open(FULL_POWER_FILE, 'r') as f_d:
+    FULL_POWER = int(f_d.read())
+
+with open(CURRENT_POWER_FILE, 'r') as f_d:
+    CURRENT_POWER = int(f_d.read())
+
+POWER_CALC = '%.2f' % float(CURRENT_POWER / FULL_POWER)
+
+print(f"Current power: {POWER_CALC}/1")
